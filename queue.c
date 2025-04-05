@@ -56,13 +56,17 @@ int number_of_moves(struct game_state start) {
     }
 
     struct queue q = {0};
+    struct linked_list visited = {0}; //list to track visited states
+    
     enqueue(&q, start);
+    insert_at_head(&visited, serialize(start));
 
     while (q.data.head != NULL) {
         struct game_state current = dequeue(&q);
 
         if (is_solved(&current)) {
             free_list(q.data);
+            free_list(visited);
             return current.num_steps;
         }
 
@@ -74,13 +78,25 @@ int number_of_moves(struct game_state start) {
             
             if (new_row >= 0 && new_row < 4 && new_col >= 0 && new_col < 4) {
                 struct game_state next = current;
+                
                 next.tiles[current.empty_row][current.empty_col] = next.tiles[new_row][new_col];
                 next.tiles[new_row][new_col] = 0;
                 next.empty_row = new_row;
                 next.empty_col = new_col;
                 next.num_steps++;
                 
-                if (is_valid_state(&next)) {
+                
+                uint64_t serial = serialize(next);
+                bool already_visited = false;
+                for (struct list_node *n = visited.head; n; n = n->next) {
+                    if (n->value == serial) {
+                        already_visited = true;
+                        break;
+                    }
+                }
+                
+                if (!already_visited) {
+                    insert_at_head(&visited, serial); 
                     enqueue(&q, next);
                 }
             }
@@ -88,5 +104,6 @@ int number_of_moves(struct game_state start) {
     }
 
     free_list(q.data);
+    free_list(visited);
     return -1;
 }
