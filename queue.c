@@ -2,6 +2,7 @@
 #include "tile_game.h"
 #include <stdbool.h>
 #include <stdlib.h>
+#include <assert.h>
 
 void enqueue(struct queue *q, struct game_state state) {
     if (q == NULL) return;
@@ -40,13 +41,13 @@ bool is_valid_state(const struct game_state *state) {
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 4; j++) {
             if (state->tiles[i][j] == 0) {
-                if (found_zero) return false; //many zeros
+                if (found_zero) return false;
                 found_zero = true;
                 if (i != state->empty_row || j != state->empty_col) return false;
             }
         }
     }
-    return found_zero; //one zero
+    return found_zero; 
 }
 
 int number_of_moves(struct game_state start) {
@@ -65,7 +66,7 @@ int number_of_moves(struct game_state start) {
             return current.num_steps;
         }
 
-        const int moves[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}}; //movements
+        const int moves[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}}; 
         
         for (int i = 0; i < 4; i++) {
             int new_row = current.empty_row + moves[i][0];
@@ -74,7 +75,6 @@ int number_of_moves(struct game_state start) {
             if (new_row >= 0 && new_row < 4 && new_col >= 0 && new_col < 4) {
                 struct game_state next = current;
 
-                //tile swap
                 next.tiles[current.empty_row][current.empty_col] = next.tiles[new_row][new_col];
                 next.tiles[new_row][new_col] = 0;
                 next.empty_row = new_row;
