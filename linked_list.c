@@ -12,6 +12,7 @@ struct list_node *new_node(size_t value) {
 }
 
 void insert_at_head(struct linked_list *list, size_t value) {
+  
     if (list == NULL) return;
     struct list_node *node = new_node(value);
     if (!node) return;
@@ -63,20 +64,25 @@ size_t remove_from_tail(struct linked_list *list) {
     }
 
     struct list_node *current = list->head;
-    while (current->next->next != NULL) {
+    while (current->next->next != NULL) 
+    {
         current = current->next;
     }
     
     size_t val = current->next->value;
-    free(current->next);
+
+    free(current->next);           
     current->next = NULL;
 
     return val;
 }
 
 void free_list(struct linked_list list) {
+
     struct list_node *current = list.head;
-    while (current != NULL) {
+
+    while (current != NULL) 
+    {
         struct list_node *next = current->next;
         free(current);
         current = next;
