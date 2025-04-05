@@ -40,59 +40,53 @@ bool is_solved(struct game_state state) {
 
 int number_of_moves(struct game_state start) {
     struct queue q = {0};
-
     enqueue(&q, start);
 
-    while(q.data.head!=NULL)
-    {
+    while (q.data.head != NULL) {
         struct game_state current = dequeue(&q);
 
-        //check goal state
-        if(is_solved(current))
-        {
+        if (is_solved(current)) {
+            free_list(q.data);
             return current.num_steps;
         }
 
-        struct game_state next_state;
-
-        //check all ways
-
-        //up
-        if (current.empty_row > 0)
-        {
-            next_state = current;
-            move_up(&next_state);
-            next_state.num_steps = current.num_steps + 1;
-            enqueue(&q, next_state);
+        if (current.empty_row > 0) {
+            struct game_state next = current;
+            next.tiles[next.empty_row][next.empty_col] = next.tiles[next.empty_row-1][next.empty_col];
+            next.tiles[next.empty_row-1][next.empty_col] = 0;
+            next.empty_row--;
+            next.num_steps++;
+            enqueue(&q, next);
         }
 
-        //down
-        if (current.empty_row < 3)
-        {
-            next_state = current;
-            move_down(&next_state);
-            next_state.num_steps = current.num_steps + 1;
-            enqueue(&q, next_state);
+        if (current.empty_row < 3) {
+            struct game_state next = current;
+            next.tiles[next.empty_row][next.empty_col] = next.tiles[next.empty_row+1][next.empty_col];
+            next.tiles[next.empty_row+1][next.empty_col] = 0;
+            next.empty_row++;
+            next.num_steps++;
+            enqueue(&q, next);
         }
 
-        //left
-        if (current.empty_col > 0)
-        {
-            next_state = current;
-            move_left(&next_state);
-            next_state.num_steps = current.num_steps + 1;
-            enqueue(&q, next_state);
+        if (current.empty_col > 0) {
+            struct game_state next = current;
+            next.tiles[next.empty_row][next.empty_col] = next.tiles[next.empty_row][next.empty_col-1];
+            next.tiles[next.empty_row][next.empty_col-1] = 0;
+            next.empty_col--;
+            next.num_steps++;
+            enqueue(&q, next);
         }
 
-        //right
-        if (current.empty_col < 3)
-        {
-            next_state = current;
-            move_right(&next_state);
-            next_state.num_steps = current.num_steps + 1;
-            enqueue(&q, next_state);
+        if (current.empty_col < 3) {
+            struct game_state next = current;
+            next.tiles[next.empty_row][next.empty_col] = next.tiles[next.empty_row][next.empty_col+1];
+            next.tiles[next.empty_row][next.empty_col+1] = 0;
+            next.empty_col++;
+            next.num_steps++;
+            enqueue(&q, next);
         }
     }
 
+    free_list(q.data);
     return -1;
 }
