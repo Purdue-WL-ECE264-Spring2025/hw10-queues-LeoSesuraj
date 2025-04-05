@@ -20,10 +20,26 @@ struct game_state dequeue(struct queue *q) {
     return state;
 }
 
-int number_of_moves(struct game_state start) {
+bool is_solved(struct game_state state) {
+    const uint8_t solved[4][4] = {
+        {1, 2, 3, 4},
+        {5, 6, 7, 8},
+        {9, 10, 11, 12},
+        {13, 14, 15, 0}
+    };
     
-    struct queue q;
-    init_queue(&q);
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            if (state.tiles[i][j] != solved[i][j]) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+int number_of_moves(struct game_state start) {
+    struct queue q = {0};
 
     enqueue(&q, start);
 
@@ -32,7 +48,7 @@ int number_of_moves(struct game_state start) {
         struct game_state current = dequeue(&q);
 
         //check goal state
-        if(is_goal_state(current))
+        if(is_solved(current))
         {
             return current.num_steps;
         }
