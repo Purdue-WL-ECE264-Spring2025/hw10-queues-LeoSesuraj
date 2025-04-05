@@ -6,7 +6,7 @@
 
 void enqueue(struct queue *q, struct game_state state) {
     if (q == NULL) return;
-    uint16_t serial = serialize(state);
+    uint64_t serial = serialize(state);
     insert_at_tail(&q->data, serial);
 }
 
