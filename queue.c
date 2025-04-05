@@ -47,7 +47,7 @@ bool is_valid_state(const struct game_state *state) {
             }
         }
     }
-    return found_zero; 
+    return found_zero;
 }
 
 int number_of_moves(struct game_state start) {
@@ -66,7 +66,7 @@ int number_of_moves(struct game_state start) {
             return current.num_steps;
         }
 
-        const int moves[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}}; 
+        const int moves[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
         
         for (int i = 0; i < 4; i++) {
             int new_row = current.empty_row + moves[i][0];
@@ -74,7 +74,6 @@ int number_of_moves(struct game_state start) {
             
             if (new_row >= 0 && new_row < 4 && new_col >= 0 && new_col < 4) {
                 struct game_state next = current;
-
                 next.tiles[current.empty_row][current.empty_col] = next.tiles[new_row][new_col];
                 next.tiles[new_row][new_col] = 0;
                 next.empty_row = new_row;
