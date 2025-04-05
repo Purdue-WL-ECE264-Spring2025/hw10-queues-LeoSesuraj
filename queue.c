@@ -58,28 +58,40 @@ int number_of_moves(struct game_state start) {
         //check all ways
 
         //up
-        next_state = current;
-        move_up(&next_state);
-        next_state.num_steps = current.num_steps + 1;
-        enqueue(&q, next_state);
+        if (current.empty_row > 0)
+        {
+            next_state = current;
+            move_up(&next_state);
+            next_state.num_steps = current.num_steps + 1;
+            enqueue(&q, next_state);
+        }
 
         //down
-        next_state = current;
-        move_down(&next_state);
-        next_state.num_steps = current.num_steps + 1;
-        enqueue(&q, next_state);
+        if (current.empty_row < 3)
+        {
+            next_state = current;
+            move_down(&next_state);
+            next_state.num_steps = current.num_steps + 1;
+            enqueue(&q, next_state);
+        }
 
         //left
-        next_state = current;
-        move_left(&next_state);
-        next_state.num_steps = current.num_steps + 1;
-        enqueue(&q, next_state);
+        if (current.empty_col > 0)
+        {
+            next_state = current;
+            move_left(&next_state);
+            next_state.num_steps = current.num_steps + 1;
+            enqueue(&q, next_state);
+        }
 
         //right
-        next_state = current;
-        move_right(&next_state);
-        next_state.num_steps = current.num_steps + 1;
-        enqueue(&q, next_state);
+        if (current.empty_col < 3)
+        {
+            next_state = current;
+            move_right(&next_state);
+            next_state.num_steps = current.num_steps + 1;
+            enqueue(&q, next_state);
+        }
     }
 
     return -1;
